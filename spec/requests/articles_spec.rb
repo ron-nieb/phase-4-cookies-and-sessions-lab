@@ -19,18 +19,22 @@ RSpec.describe "Articles", type: :request do
   end
 
   describe "GET /articles/:id" do
-    context 'with one pageviews' do
+    context 'with one pageview' do
       it 'returns the correct article' do
         get "/articles/#{Article.first.id}"
-  
-        expect(response.body).to include_json({ 
-          id: 1, title: 'Article 1', minutes_to_read: 10, author: 'author', content: "Content 1\nparagraph 1" 
+
+        expect(response.body).to include_json({
+          "id": a_kind_of(Integer),
+          "title": "Article 1",
+          "minutes_to_read": 10,
+          "author": "author",
+          "content": "Content 1\nparagraph 1"
         })
       end
 
       it 'uses the session to keep track of the number of page views' do
         get "/articles/#{Article.first.id}"
-  
+
         expect(session[:page_views]).to eq(1)
       end
     end
@@ -41,8 +45,12 @@ RSpec.describe "Articles", type: :request do
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
 
-        expect(response.body).to include_json({ 
-          id: 1, title: 'Article 1', minutes_to_read: 10, author: 'author', content: "Content 1\nparagraph 1" 
+        expect(response.body).to include_json({
+          "id": a_kind_of(Integer),
+          "title": "Article 1",
+          "minutes_to_read": 10,
+          "author": "author",
+          "content": "Content 1\nparagraph 1"
         })
       end
 
@@ -50,7 +58,7 @@ RSpec.describe "Articles", type: :request do
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
-  
+
         expect(session[:page_views]).to eq(3)
       end
     end
@@ -62,8 +70,8 @@ RSpec.describe "Articles", type: :request do
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
 
-        expect(response.body).to include_json({ 
-          error: "Maximum pageview limit reached"
+        expect(response.body).to include_json({
+          "error": "Maximum pageview limit reached"
         })
       end
 
@@ -81,7 +89,7 @@ RSpec.describe "Articles", type: :request do
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
         get "/articles/#{Article.first.id}"
-  
+
         expect(session[:page_views]).to eq(4)
       end
     end
